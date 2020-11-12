@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const path = require('path');
-// const ansiRegex = require('ansi-regex');
+const ansiRegex = require('ansi-regex');
 
 const isDevelop = process.env.NODE_ENV === 'development';
 let plugins = [];
@@ -34,6 +35,6 @@ module.exports = {
   },
 
   filenameHashing: isDevelop,
-  productionSourceMap: isDevelop
-  // transpileDependencies: [ansiRegex]
+  productionSourceMap: isDevelop,
+  transpileDependencies: [ansiRegex]
 };
