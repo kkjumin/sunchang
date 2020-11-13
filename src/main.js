@@ -7,6 +7,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import '@/assets/css/reset.css';
+
 Vue.config.productionTip = false;
 // lodash
 Vue.use(VueLodash, { name: 'custom', lodash });
@@ -16,7 +18,7 @@ Vue.prototype.$http = axios;
 Vue.prototype.$bus = new Vue();
 
 new Vue({
-  router,
-  store,
-  render: (h) => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app');

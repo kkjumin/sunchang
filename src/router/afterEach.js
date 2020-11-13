@@ -1,3 +1,3 @@
-export default (to) => {
-  console.log('afterEach', to.name);
+export default to => {
+    console.log('afterEach', to.name);
 };
