@@ -1,29 +1,32 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Router from 'vue-router';
+import beforEach from './beforEach';
+import afterEach from './afterEach';
 
-Vue.use(VueRouter);
+Vue.use(Router);
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-];
+/** modules폴더 안에 있는 js 자동 improt */
+const modulesFiles = require.context('./modules', true, /\.js$/);
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+  const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');
+  const value = modulesFiles(modulePath);
+  return !moduleName.includes('/') ? modules.concat(value.default) : modules;
+}, []);
 
-const router = new VueRouter({
+/* Avoided redundant navigation to current location 에러 처리 */
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
+
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes: modules,
+  scrollBehavior: (to, from, savedPosition) => (savedPosition || { x: 0, y: 0 })
 });
+
+router.beforeEach(beforEach);
+router.afterEach(afterEach);
 
 export default router;
