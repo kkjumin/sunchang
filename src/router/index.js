@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import Vue from 'vue';
 import Router from 'vue-router';
 import beforEach from './beforEach';
